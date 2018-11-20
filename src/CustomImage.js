@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import { Router, Route, Switch } from "react-router-dom";
 import LabelCore from "./LabelCore";
 
-// deployed : https://build-nxlgip84f.now.sh
+// deployed : https://build-2uuwugmj8.now.sh
 const style = {
   annotationContainer: {
     display: "flex",
