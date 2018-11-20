@@ -1,110 +1,44 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import ImportWithZoid from "./ImportWithZoid";
+import CustomImage from "./CustomImage";
+import { from, interval, of } from "rxjs";
+import { flatMap } from "rxjs/operators";
 
-window.MyLoginZoidComponent = window.zoid.create({
-  tag: "fastag-custom-component-image-v1",
-  url: window.zoid.getCurrentScriptDir(),
-  autoResize: { width: true, height: true }
+window.fastagCustomComponent = window.zoid.create({
+  tag: "fastag-custom-component-image-v1"
 });
-class App extends Component {
-  state = {
-    streamSubscribed: false,
-    currentJob: null
-  };
-  componentWillMount() {
-    const { currentJob } = this.props;
-    this.setState({ currentJob });
-  }
 
-  handler = event => async data => {
-    const { currentJob } = this.state;
-    if (currentJob) {
-      this.setState({ currentJob: null });
-      const currentJobPromise = await event(data);
-      // const currentJob = await currentJobPromise();
-      console.log("currentJob", currentJobPromise);
-      this.setState({ currentJob: currentJobPromise });
-      console.log("dssssd", data);
+class App extends Component {
+  componentWillMount() {
+    this.getStreamData();
+  }
+  getStreamData = () => {
+    const { stream } = this.props;
+    if (stream) {
+      return interval(500).pipe(flatMap(() => from(this.props.stream())));
+    } else {
+      return of({
+        filename: "datasets/img/sidebar-3.jpg",
+        jobID: "0Ksj5Ep7Ea6p44+num2PMmRqyfw=",
+        DatesetType: "CUSTOM_ANNOTATION",
+        workgroupID: "image-custom-ui_v1",
+        idName: "1",
+        receiptHandle:
+          "AQEB6PAdUcf8hRBARNUh5jrnsza5oj74ugjPfEcbfaF4+0+5qEIj1S2CYnVg6cgbTFMOpL0101jG36vk1sdcOYAyAhO/tKrFaxxaO8nLhHKunbgJ2mU22VIkaPciJvgNM2biqIazrjKhcv+WnYW32tsYJxf0uIc7R/UyPOScYm2Gvd3pdnkBhlzwC19WSaIIfAws5zaDIkJsWpKXPYpbxGYxun9HkblRvDIt+m6TGpqWGpKqxQYIjP5PDkHKJRvrXwX/04DArvn+MCoyeAK+siXveVu8Q9QUSDBtV5z65gYkYeuL/sl4QejE2gI/lfhlVs/VuEInpWQzFKEN23KL5lA1qf141muePrWA+w6c6m4pvRb18EnVijPoyPYijqcDffAfjJMJp+GqpXmhDS7m39NWGxBCPIDAWUAcyhmczNa3hZubH/T68IKtfEJaPGCOtoKA",
+        jobActionType: "ANNOTATION",
+        url:
+          "https://www.frenchweb.fr/wp-content/uploads/2018/08/IA-shutterstock_678583375-650x405.jpg"
+      });
     }
   };
 
   render() {
-    let login = () => {};
-
-    const { labels, annotationAction, previousJob, skipJob } = this.props;
-    if (window.stream) {
-      if (!this.state.streamSubscribed) {
-        window.stream.subscribe(job => {
-          console.log("job", job);
-          this.setState({ currentJob: job, streamSubscribed: true });
-        });
-      }
-    } else {
-      console.log("stream not defined");
-    }
-
-    console.log("stt()");
-    const { currentJob } = this.state;
-    console.log("currentJob.url", currentJob && currentJob.url);
-    return (
-      <div style={{ width: 800, height: "100%" }}>
-        <div>
-          <div> cutom ui v3 </div>
-          <div style={{ width: 400, height: 600 }}>
-            {currentJob && (
-              <img style={{ width: 400, height: 600 }} src={currentJob.url} />
-            )}
-          </div>
-          <div>
-            <button
-              onClick={() => {
-                this.handler(annotationAction)("hello");
-              }}
-            >
-              data wiki
-            </button>
-            <button
-              onClick={() => {
-                console.log("previousJob");
-                this.handler(previousJob)("hello");
-              }}
-            >
-              previousJob
-            </button>
-            <button
-              onClick={() => {
-                this.handler(skipJob)("hello");
-              }}
-            >
-              skipJob
-            </button>
-          </div>
-          <pre>{JSON.stringify(this.state.currentJob, null, 2)}</pre>
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
-        </div>
-
-        <div>
-          <svg
-            id="spinner"
-            className="spinner"
-            width="65px"
-            height="65px"
-            viewBox="0 0 66 66"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              className="path"
-              fill="none"
-              strokeWidth="6"
-              strokeLinecap="round"
-              cx="33"
-              cy="33"
-              r="30"
-            />
-          </svg>
-        </div>
-      </div>
+    const CustomComponent = ImportWithZoid(
+      CustomImage,
+      this.getStreamData(),
+      "fastag-custom-component-image-v1"
     );
+    return <CustomComponent {...this.props} />;
   }
 }
 

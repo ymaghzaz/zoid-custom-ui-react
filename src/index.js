@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import MyLoginComponent from "./App";
+import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <MyLoginComponent {...window.xprops} />,
+  <App {...window.xprops} />,
   document.getElementById("container")
 );
 
