@@ -17,6 +17,9 @@ class CustomImage extends Component {
       <div style={{ width: 800, height: "100%" }}>
         <div>
           <div> cutom ui v7 </div>
+          {labels && (
+            <LabelCore labels={labels} annotationAction={annotationAction} />
+          )}
           <div style={{ width: 400, height: 600 }}>
             {currentJob && (
               <img style={{ width: 400, height: 600 }} src={currentJob.url} />
@@ -27,9 +30,6 @@ class CustomImage extends Component {
             <button onClick={skipJob}>skipJob</button>
           </div>
 
-          {labels && (
-            <LabelCore labels={labels} annotationAction={annotationAction} />
-          )}
           <pre>{JSON.stringify(currentJob, null, 2)}</pre>
         </div>
       </div>
