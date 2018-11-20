@@ -28,7 +28,6 @@ const ImportWithZoid = (Custom, stream$, tag) => {
     render() {
       const { labels, annotationAction, previousJob, skipJob } = this.props;
       const { currentJob } = this.state;
-      console.log("Suspense Suspense Suspense");
       return (
         <Custom
           labels={labels}
